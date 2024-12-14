@@ -11,6 +11,20 @@ interface EventStore {
   filterEvents: (keyword: string) => Event[];
 }
 
+// Custom storage implementation
+const customStorage = {
+  getItem: (name: string) => {
+    const item = localStorage.getItem(name);
+    return item ? JSON.parse(item) : null; // Parse the JSON string
+  },
+  setItem: (name: string, value: any) => {
+    localStorage.setItem(name, JSON.stringify(value)); // Stringify the value
+  },
+  removeItem: (name: string) => {
+    localStorage.removeItem(name);
+  },
+};
+
 const useEventStore = create<EventStore>()(
   persist(
     (set, get) => ({
@@ -44,7 +58,10 @@ const useEventStore = create<EventStore>()(
           event.description?.toLowerCase().includes(keyword.toLowerCase())
         ),
     }),
-
+    {
+      name: 'event-calendar-storage', // Name of the storage
+      storage: customStorage, // Use the custom storage
+    }
   )
 );
 
