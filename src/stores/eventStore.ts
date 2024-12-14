@@ -44,10 +44,7 @@ const useEventStore = create<EventStore>()(
           event.description?.toLowerCase().includes(keyword.toLowerCase())
         ),
     }),
-    {
-      name: 'event-calendar-storage',
-      getStorage: () => localStorage,
-    }
+
   )
 );
 
